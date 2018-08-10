@@ -1,0 +1,111 @@
+#!/bin/bash
+
+SUBJ_PREFIX="/C=CZ/ST=Jihomoravsky kraj/L=Brno/O=OpenStack Common Libraries/OU=Engineering"
+CA_KEY_SIZE=2048
+KEY_SIZE=2048
+
+function gen_ca() {
+    rm -f index* serial*
+    touch index.txt
+    echo 1000 > serial
+
+    for d in certs crl csr newcerts private
+    do [ ! -d $d ] && mkdir $d
+    done
+    chmod 700 private
+}
+
+function gen_key() {
+    file_name=private/$1.key.pem
+
+    if [ -f $file_name ]; then
+        rm -f $file_name
+    fi
+
+    openssl genrsa -out $file_name $2
+    chmod 400 $file_name
+}
+
+function gen_csr() {
+    openssl req -new \
+                -subj "$SUBJ_PREFIX/CN=$1" \
+                -key private/$2.key.pem \
+                -out csr/$2.csr.pem \
+                -config $3
+}
+
+function gen_cert() {
+    openssl ca -batch \
+               -in $1/csr/$2.csr.pem \
+               -out $1/certs/$2.cert.pem \
+               -config $3 -extensions $4 -days $5
+    chmod 444 $1/certs/$2.cert.pem
+}
+
+### Root CA
+
+echo "> Generating Root CA database"
+gen_ca
+
+echo "> Generating Root CA key"
+gen_key ca $CA_KEY_SIZE
+
+echo "> Generating Root CA cert"
+rm -f certs/ca.cert.pem
+openssl req -new -text -x509 -days 7300 -batch \
+            -config root_ca_openssl.conf -extensions v3_ca \
+            -key private/ca.key.pem -out certs/ca.cert.pem \
+            -subj "$SUBJ_PREFIX/CN=Root CA"
+chmod 444 certs/ca.cert.pem
+
+### Intermediate CAs
+
+echo "> Generating Intermediate CAs"
+[ ! -d intermediate_cas ] && mkdir intermediate_cas
+for i in $(seq -f "%03g" 1 5); do \
+    cd intermediate_cas
+    
+    echo ">> Generating Intermediate CA $i database"
+    [ ! -d $i ] && mkdir $i
+    cd $i
+    gen_ca
+
+    echo ">> Generating Intermediate CA $i key"
+    gen_key intermediate $CA_KEY_SIZE
+
+    echo ">> Generating Intermediate CA $i cert"
+    gen_csr "Intermediate CA $i" intermediate \
+            ../../intermediate_ca_openssl.conf
+    cd ../..
+    gen_cert intermediate_cas/$i intermediate \
+             root_ca_openssl.conf v3_intermediate_ca 3650
+done
+
+### Server certificate
+
+echo "> Generating Server key"
+gen_key server $KEY_SIZE
+
+echo "> Generating Server cert"
+gen_csr "Server" server root_ca_openssl.conf
+gen_cert . server root_ca_openssl.conf server_cert 375
+
+### Nodes certificates
+cd intermediate_cas
+for i in $(seq -f "%03g" 1 5); do \
+    cd $i
+    for j in $(seq -f "%03g" 1 5); do \
+        echo ">> Generating Node $i$j key"
+        gen_key node$i$j $KEY_SIZE
+
+        echo ">> Generating Node $i$j cert"
+        gen_csr "Node $i$j" node$i$j \
+                ../../intermediate_ca_openssl.conf
+        gen_cert . node$i$j \
+                 ../../intermediate_ca_openssl.conf usr_cert 21
+    done
+    rm *.old
+    cd ..
+done
+cd ..
+rm *.old

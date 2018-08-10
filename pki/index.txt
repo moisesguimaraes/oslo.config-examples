@@ -1,0 +1,6 @@
+V	280807162805Z		1000	unknown	/C=CZ/ST=Jihomoravsky kraj/O=OpenStack Common Libraries/OU=Engineering/CN=Intermediate CA 001
+V	280807162806Z		1001	unknown	/C=CZ/ST=Jihomoravsky kraj/O=OpenStack Common Libraries/OU=Engineering/CN=Intermediate CA 002
+V	280807162807Z		1002	unknown	/C=CZ/ST=Jihomoravsky kraj/O=OpenStack Common Libraries/OU=Engineering/CN=Intermediate CA 003
+V	280807162809Z		1003	unknown	/C=CZ/ST=Jihomoravsky kraj/O=OpenStack Common Libraries/OU=Engineering/CN=Intermediate CA 004
+V	280807162810Z		1004	unknown	/C=CZ/ST=Jihomoravsky kraj/O=OpenStack Common Libraries/OU=Engineering/CN=Intermediate CA 005
+V	190820162811Z		1005	unknown	/C=CZ/ST=Jihomoravsky kraj/O=OpenStack Common Libraries/OU=Engineering/CN=Server
