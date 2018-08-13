@@ -1,11 +1,15 @@
 #!/bin/bash
 
+set -eu
+
 SUBJ_PREFIX="/C=CZ/ST=Jihomoravsky kraj/L=Brno/O=OpenStack Common Libraries/OU=Engineering"
-CA_KEY_SIZE=2048
+CA_KEY_SIZE=4096
 KEY_SIZE=2048
 
+# clean up
+rm -rf serial index.txt certs crl csr intermediate_cas newcerts private
+
 function gen_ca() {
-    rm -f index* serial*
     touch index.txt
     echo 1000 > serial
 
@@ -44,36 +48,44 @@ function gen_cert() {
 
 ### Root CA
 
-echo "> Generating Root CA database"
+echo -e "\n> Generating Root CA database"
 gen_ca
 
-echo "> Generating Root CA key"
+echo -e "\n> Generating Root CA key"
 gen_key ca $CA_KEY_SIZE
 
-echo "> Generating Root CA cert"
-rm -f certs/ca.cert.pem
+echo -e "\n> Generating Root CA cert"
 openssl req -new -text -x509 -days 7300 -batch \
             -config root_ca_openssl.conf -extensions v3_ca \
             -key private/ca.key.pem -out certs/ca.cert.pem \
             -subj "$SUBJ_PREFIX/CN=Root CA"
 chmod 444 certs/ca.cert.pem
 
+### Server certificate
+
+echo -e "\n> Generating Server key"
+gen_key server $KEY_SIZE
+
+echo -e "\n> Generating Server cert"
+gen_csr "Server" server root_ca_openssl.conf
+gen_cert . server root_ca_openssl.conf server_cert 375
+
 ### Intermediate CAs
 
-echo "> Generating Intermediate CAs"
+echo -e "\n> Generating Intermediate CAs"
 [ ! -d intermediate_cas ] && mkdir intermediate_cas
 for i in $(seq -f "%03g" 1 5); do \
     cd intermediate_cas
     
-    echo ">> Generating Intermediate CA $i database"
+    echo -e "\n>> Generating Intermediate CA $i database"
     [ ! -d $i ] && mkdir $i
     cd $i
     gen_ca
 
-    echo ">> Generating Intermediate CA $i key"
+    echo -e "\n>> Generating Intermediate CA $i key"
     gen_key intermediate $CA_KEY_SIZE
 
-    echo ">> Generating Intermediate CA $i cert"
+    echo -e "\n>> Generating Intermediate CA $i cert"
     gen_csr "Intermediate CA $i" intermediate \
             ../../intermediate_ca_openssl.conf
     cd ../..
@@ -81,31 +93,24 @@ for i in $(seq -f "%03g" 1 5); do \
              root_ca_openssl.conf v3_intermediate_ca 3650
 done
 
-### Server certificate
-
-echo "> Generating Server key"
-gen_key server $KEY_SIZE
-
-echo "> Generating Server cert"
-gen_csr "Server" server root_ca_openssl.conf
-gen_cert . server root_ca_openssl.conf server_cert 375
-
 ### Nodes certificates
 cd intermediate_cas
 for i in $(seq -f "%03g" 1 5); do \
     cd $i
     for j in $(seq -f "%03g" 1 5); do \
-        echo ">> Generating Node $i$j key"
+        echo -e "\n>> Generating Node $i$j key"
         gen_key node$i$j $KEY_SIZE
 
-        echo ">> Generating Node $i$j cert"
+        echo -e "\n>> Generating Node $i$j cert"
         gen_csr "Node $i$j" node$i$j \
                 ../../intermediate_ca_openssl.conf
         gen_cert . node$i$j \
                  ../../intermediate_ca_openssl.conf usr_cert 21
+        cat certs/node$i$j.cert.pem certs/intermediate.cert.pem \
+            > certs/node$i$j.chain.pem
     done
-    rm *.old
+    rm -f *.old
     cd ..
 done
 cd ..
-rm *.old
+rm -f *.old
