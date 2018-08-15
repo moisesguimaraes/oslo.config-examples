@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+    <form action="{{ url_for('config_new') }}" method="post">
+        <fieldset>
+          <div class="form-group">
+            <label for="id">id</label>
+            <input type="text" id="id" name="id" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="dn">Domain Name</label>
+            <input type="text" id="dn" name="dn" class="form-control">
+          </div>
+          <button type="submit" class="btn btn-primary btn-save">Save</button>
+          <a class="btn btn-danger" href="{{ url_for('index') }}">Back</a>
+        </fieldset>
+    </form>
+{% endblock %}

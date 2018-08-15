@@ -3,9 +3,9 @@ FROM python:alpine
 
 LABEL maintainer="Moisés Guimarães de Medeiros <moguimar@redhat.com>"
 
-COPY flask /flask/
+COPY requirements.txt /
 
-RUN pip install -r /flask/requirements.txt
+RUN pip install -r /requirements.txt
 
 EXPOSE 5000
 

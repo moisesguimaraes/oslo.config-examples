@@ -2,11 +2,12 @@ version: '3'
 services:
   nginx:
     build:
-      dockerfile: nginx.dockerfile
-      context: .
-    image: oslo_config_remote_file/nginx
+      dockerfile: nginx-prod.dockerfile
+      context: docker
+    image: oslo_config_remote_file_prod/nginx
     container_name: nginx
     ports:
+      - '80:80'
       - '443:443'
     networks:
       - production-network
@@ -16,10 +17,10 @@ services:
       - flask3
   flask1:
     build:
-      dockerfile: flask.dockerfile
+      dockerfile: docker/flask-prod.dockerfile
       context: .
-    image: oslo_config_remote_file/flask
-    container_name: oslo-config-remote-file-1
+    image: oslo_config_remote_file_prod/flask
+    container_name: flask1
     ports:
       - '5000'
     networks:
@@ -28,10 +29,10 @@ services:
       - mongodb
   flask2:
     build:
-      dockerfile: flask.dockerfile
+      dockerfile: docker/flask-prod.dockerfile
       context: .
-    image: oslo_config_remote_file/flask
-    container_name: oslo-config-remote-file-2
+    image: oslo_config_remote_file_prod/flask
+    container_name: flask2
     ports:
       - '5000'
     networks:
@@ -40,10 +41,10 @@ services:
       - mongodb
   flask3:
     build:
-      dockerfile: flask.dockerfile
+      dockerfile: docker/flask-prod.dockerfile
       context: .
-    image: oslo_config_remote_file/flask
-    container_name: oslo-config-remote-file-3
+    image: oslo_config_remote_file_prod/flask
+    container_name: flask3
     ports:
       - '5000'
     networks:
@@ -52,12 +53,11 @@ services:
       - mongodb
   mongodb:
     image: mongo
+    container_name: mongo
     environment:
     - MONGO_DATA_DIR=/usr/data/db
     volumes:
       - ./data/db:/usr/data/db
-    ports:
-      - 27017:27017
     networks:
       - production-network
 networks:

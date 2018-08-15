@@ -1,0 +1,39 @@
+version: '3'
+services:
+  nginx:
+    build:
+      dockerfile: nginx-dev.dockerfile
+      context: docker
+    image: oslo_config_remote_file_dev/nginx
+    container_name: nginx
+    ports:
+      - '80:80'
+      - '443:443'
+    networks:
+      - production-network
+    depends_on:
+      - flask-dev
+  flask-dev:
+    build:
+      dockerfile: docker/flask-dev.dockerfile
+      context: .
+    image: oslo_config_remote_file_dev/flask
+    container_name: flask
+    volumes:
+      - .:/flask
+    networks:
+      - production-network
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo
+    container_name: mongo
+    environment:
+    - MONGO_DATA_DIR=/usr/data/db
+    volumes:
+      - ./data/db:/usr/data/db
+    networks:
+      - production-network
+networks:
+  production-network:
+    driver: bridge
