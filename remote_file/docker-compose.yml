@@ -1,0 +1,49 @@
+version: '3'
+services:
+  nginx:
+    build:
+      dockerfile: nginx.dockerfile
+      context: .
+    image: oslo_config_remote_file/nginx
+    container_name: nginx
+    ports:
+      - '443:443'
+    networks:
+      - production-network
+    depends_on:
+      - flask1
+      - flask2
+      - flask3
+  flask1:
+    build:
+      dockerfile: flask.dockerfile
+      context: .
+    image: oslo_config_remote_file/flask
+    container_name: oslo-config-remote-file-1
+    ports:
+      - '5000'
+    networks:
+      - production-network
+  flask2:
+    build:
+      dockerfile: flask.dockerfile
+      context: .
+    image: oslo_config_remote_file/flask
+    container_name: oslo-config-remote-file-2
+    ports:
+      - '5000'
+    networks:
+      - production-network
+  flask3:
+    build:
+      dockerfile: flask.dockerfile
+      context: .
+    image: oslo_config_remote_file/flask
+    container_name: oslo-config-remote-file-3
+    ports:
+      - '5000'
+    networks:
+      - production-network
+networks:
+  production-network:
+    driver: bridge
