@@ -1,1 +1,2 @@
-flask
+Flask>=1.0.2
+Flask_PyMongo>=2.1.0

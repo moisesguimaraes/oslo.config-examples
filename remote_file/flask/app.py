@@ -1,6 +1,9 @@
 from flask import Flask, request
+from flask_pymongo import PyMongo
 
 app = Flask(__name__)
+app.config["MONGO_URI"] = "mongodb://mongodb:27017/remote_file"
+mongo = PyMongo(app)
 
 user_id_template = "CN=Node {i:03d}{j:03d},OU=Engineering,O=OpenStack Common Libraries,L=Brno,ST=Jihomoravsky kraj,C=CZ"
 secrets_template = "[DEFAULT]\n\nsuper_secret=super{i:03d}{j:03d}secret\n\n[db]\n\nusername=username_{i:03d}{j:03d}\npassword=dbpasswd_{i:03d}{j:03d}\n"

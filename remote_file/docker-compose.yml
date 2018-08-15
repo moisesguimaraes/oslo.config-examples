@@ -24,6 +24,8 @@ services:
       - '5000'
     networks:
       - production-network
+    depends_on:
+      - mongodb
   flask2:
     build:
       dockerfile: flask.dockerfile
@@ -34,6 +36,8 @@ services:
       - '5000'
     networks:
       - production-network
+    depends_on:
+      - mongodb
   flask3:
     build:
       dockerfile: flask.dockerfile
@@ -42,6 +46,18 @@ services:
     container_name: oslo-config-remote-file-3
     ports:
       - '5000'
+    networks:
+      - production-network
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo
+    environment:
+    - MONGO_DATA_DIR=/usr/data/db
+    volumes:
+      - ./data/db:/usr/data/db
+    ports:
+      - 27017:27017
     networks:
       - production-network
 networks:
