@@ -33,10 +33,20 @@ def config_new():
         return render_template('config_new.html')
 
     if request.method == "POST":
-        config = {
-            "id" : request.form["id"],
-            "dn" : request.form["dn"]
+        id = request.form["id"]
+        dn = request.form["dn"]
+
+        groups = {
+            "DEFAULT": {
+                "super_secret": "foo{}bar".format(id),
+            },
+            "db": {
+                "username": "user{}".format(id),
+                "password": "pass{}".format(id),
+            }
         }
+
+        config = {"id": id, "dn": dn, "groups": groups}
 
         mongo.db.configs.insert_one(config)
 
@@ -45,7 +55,7 @@ def config_new():
 
 @app.route('/config/edit/<id>', methods=["GET", "POST"])
 def config_edit(id):
-    config = mongo.db.configs.find_one({"id":id})
+    config = mongo.db.configs.find_one({"id": id})
 
     if request.method == "GET":
         return render_template('config_edit.html', config=config)
@@ -54,14 +64,14 @@ def config_edit(id):
         config["id"] = request.form["id"]
         config["dn"] = request.form["dn"]
 
-        mongo.db.configs.replace_one({"id":id}, config)
+        mongo.db.configs.replace_one({"id": id}, config)
 
         return redirect(url_for('index'))
 
 
 @app.route('/config/delete/<id>', methods=["POST"])
 def config_delete(id):
-    mongo.db.configs.delete_one({"id":id})
+    mongo.db.configs.delete_one({"id": id})
 
     return redirect(url_for('index'))
 
@@ -72,8 +82,16 @@ def remote_file():
         abort(404)
 
     sdn = request.headers["Client-Subject-Domain-Name"]
-    cfg = mongo.db.configs.find_one({"dn":sdn})
-    return str(cfg)
+    cfg = mongo.db.configs.find_one({"dn": sdn})
+
+    config = []
+
+    for group, opts in cfg["groups"].items():
+        config.append("\n[{}]\n".format(group))
+        for name, value in opts.items():
+            config.append("{}={}".format(name, value))
+
+    return "\n".join(config) + "\n"
 
 
 if __name__ == '__main__':
