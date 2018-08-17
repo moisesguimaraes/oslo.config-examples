@@ -35,18 +35,9 @@ def config_new():
     if request.method == "POST":
         id = request.form["id"]
         dn = request.form["dn"]
+        data = request.form["data"]
 
-        groups = {
-            "DEFAULT": {
-                "super_secret": "foo{}bar".format(id),
-            },
-            "db": {
-                "username": "user{}".format(id),
-                "password": "pass{}".format(id),
-            }
-        }
-
-        config = {"id": id, "dn": dn, "groups": groups}
+        config = {"id": id, "dn": dn, "data": data}
 
         mongo.db.configs.insert_one(config)
 
@@ -63,6 +54,7 @@ def config_edit(id):
     if request.method == "POST":
         config["id"] = request.form["id"]
         config["dn"] = request.form["dn"]
+        config["data"] = request.form["data"]
 
         mongo.db.configs.replace_one({"id": id}, config)
 
@@ -84,14 +76,7 @@ def remote_file():
     sdn = request.headers["Client-Subject-Domain-Name"]
     cfg = mongo.db.configs.find_one({"dn": sdn})
 
-    config = []
-
-    for group, opts in cfg["groups"].items():
-        config.append("\n[{}]\n".format(group))
-        for name, value in opts.items():
-            config.append("{}={}".format(name, value))
-
-    return "\n".join(config) + "\n"
+    return cfg["data"]
 
 
 if __name__ == '__main__':

@@ -15,31 +15,28 @@
 -->
 
 {% extends "base.html" %}
-{% block content %}
-    <a class="btn btn-primary" href="{{ url_for('config_new') }}">New Config</a>
 
-        <table class="table table-striped table-responsive table-bordered">
-            <thead class="thead-default">
-                <tr>
-                    <th>id</th>
-                    <th>DN</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for config in configs %}
-                <tr>
-                    <td>{{ config.id }}</td>
-                    <td>{{ config.dn }}</td>
-                    <td>
-                        <a href="{{ url_for('config_edit', id=config.id) }}">Edit</a>
-                        <form action="{{ url_for('config_delete', id=config.id) }}" method="POST" name="config_{{ config.id }}">
-                            <a href="#" onclick="document.config_{{ config.id }}.submit();">Delete</a>
-                            </form>
-                        <a href="{{ url_for('config_delete', id=config.id) }}"></a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+{% block layout %}no-sidebar{% endblock %}
+
+{% block title %}Configs{% endblock %}
+
+{% block subtitle %}<a class="button alt" href="{{ url_for('config_new') }}">New Config</a>{% endblock %}
+
+{% block content %}
+    <table class="style1">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>DN</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for config in configs %}
+            <tr>
+                <td><a href="{{ url_for('config_edit', id=config.id) }}">{{ config.id }}</a></td>
+                <td>{{ config.dn }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

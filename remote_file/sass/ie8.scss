@@ -1,0 +1,103 @@
+@import 'libs/vars';
+@import 'libs/functions';
+@import 'libs/mixins';
+@import 'libs/skel';
+
+/*
+	Iconic by Pixelarity
+	pixelarity.com | hello@pixelarity.com
+	License: pixelarity.com/license
+*/
+
+/* Lists */
+
+	ul.style1 {
+		img {
+			-ms-behavior: url('static/js/ie/PIE.htc');
+		}
+		li a {
+			color: inherit;
+		}
+	}
+
+/* Buttons */
+
+	.button {
+		-ms-behavior: url('static/js/ie/PIE.htc');
+		&:hover {
+			background: none;
+			border-color: #fff;
+		}
+	}
+
+	.button-alt:hover {
+		border-color: #444E59;
+		background: #444E59;
+	}
+
+	.button-alt2:hover {
+		border-color: #4ab5d4;
+		background: #4ab5d4;
+	}
+
+/* Forms */
+
+	form {
+		input[type=text],
+		input[type=password],
+		select,
+		textarea {
+			-ms-behavior: url('static/js/ie/PIE.htc');
+		}
+	}
+
+/* Page Center Title */
+
+	.title span {
+		-ms-behavior: url('static/js/ie/PIE.htc');
+	}
+
+/* Pennant */
+
+	.pennant {
+		-ms-behavior: url('static/js/ie/PIE.htc');
+		border: solid 2px #fff;
+	}
+
+/* Wrappers */
+
+	.homepage #main-wrapper:before {
+		display: none;
+	}
+
+/* Nav */
+
+	.dropotron {
+		-ms-behavior: url('static/js/ie/PIE.htc');
+
+		a, span {
+			color: #aab4bb;
+		}
+	}
+
+	.dropotron-level-0:before {
+		display: none;
+	}
+
+/* Banner */
+
+	#banner {
+		color: #fff;
+	}
+
+/* Featured	*/
+
+	#featured {
+		color: #aab4bb;
+	}
+
+/* Main */
+
+	#main {
+		-ms-behavior: url('static/js/ie/PIE.htc');
+	}

@@ -15,31 +15,51 @@
 -->
 
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Oslo Config Remote File Server</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
-  </head>
-  <body>
-    <div class="container">
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul id="messages" class="list-unstyled">
-                {% for message in messages %}
-                    <li class="alert alert-success">{{ message }}</li>
-                {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
-
-        {% block content %}{% endblock %}
-
-    </div>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.slim.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
-  </body>
+<html lang="en">
+    <head>
+        <title>Oslo Config Manager</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!--[if lte IE 8]><script type="text/javascript" src="{{ url_for('static', filename='js/ie/html5shiv.js') }}"></script><![endif]-->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+        <!--[if lte IE 8]><link rel="stylesheet" href="{{ url_for('static', filename='css/ie8.css') }}" /><![endif]-->
+    </head>
+    <body class="{% block layout %}{% endblock %}">
+        <div id="page-wrapper">
+            <!-- Header Wrapper -->
+                <div id="header-wrapper">
+                    <!-- Header -->
+                        <div id="header" class="container">
+                            <!-- Logo -->
+                                <h1><a href="index.html" id="logo">Oslo Config Manager</a></h1>
+                        </div>
+                </div>
+            <!-- Main Wrapper -->
+                <div id="main-wrapper">
+                    <!-- Main -->
+                    <div id="page" class="container">
+                        <!-- Main Heading -->
+                            <div class="title-heading">
+                                <h2>{% block title %}{% endblock %}</h2>
+                                {% block subtitle %}{% endblock %}
+                            </div>
+                        <!-- Main Content -->
+                            <div id="main">
+                                <div class="row">
+                                    <div id="content" class="12u">
+                                        {% block content %}{% endblock %}
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+        </div>
+        <!-- Scripts -->
+            <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+            <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.dropotron.min.js') }}"></script>
+            <script type="text/javascript" src="{{ url_for('static', filename='js/skel.min.js') }}"></script>
+            <script type="text/javascript" src="{{ url_for('static', filename='js/util.js') }}"></script>
+            <!--[if lte IE 8]><script type="text/javascript" src="{{ url_for('static', filename='js/ie/respond.min.js') }}"></script><![endif]-->
+            <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+    </body>
 </html>

@@ -15,19 +15,33 @@
 -->
 
 {% extends "base.html" %}
+
+{% block layout %}no-sidebar{% endblock %}
+
+{% block title %}New Config{% endblock %}
+
 {% block content %}
-    <form action="{{ url_for('config_new') }}" method="post">
-        <fieldset>
-          <div class="form-group">
-            <label for="id">id</label>
-            <input type="text" id="id" name="id" class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="dn">Domain Name</label>
-            <input type="text" id="dn" name="dn" class="form-control">
-          </div>
-          <button type="submit" class="btn btn-primary btn-save">Save</button>
-          <a class="btn btn-danger" href="{{ url_for('index') }}">Back</a>
-        </fieldset>
-    </form>
+  <form method="post" action="{{ url_for('config_new') }}">
+    <div class="row 50%">
+      <div class="4u">
+        <input type="text" name="id" id="id" placeholder="ID" />
+      </div>
+      <div class="8u">
+        <input type="text" name="dn" id="dn" placeholder="Domain Name" />
+      </div>
+    </div>
+    <div class="row 50%">
+      <div class="12u">
+        <textarea name="data" id="data" placeholder="Config"></textarea>
+      </div>
+    </div>
+    <div class="row 50%">
+      <div class="12u">
+        <ul class="actions">
+          <li><input type="submit" class="button alt2" value="Save"/></li>
+          <li><a href="{{ url_for('index') }}" class="button alt">Back</a></li>
+        </ul>
+      </div>
+    </div>
+  </form>      
 {% endblock %}

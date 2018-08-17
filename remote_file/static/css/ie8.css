@@ -1,0 +1,96 @@
+/*
+	Iconic by Pixelarity
+	pixelarity.com | hello@pixelarity.com
+	License: pixelarity.com/license
+*/
+
+/* Lists */
+
+	ul.style1 img {
+		-ms-behavior: url("static/js/ie/PIE.htc");
+	}
+
+	ul.style1 li a {
+		color: inherit;
+	}
+
+/* Buttons */
+
+	.button {
+		-ms-behavior: url("static/js/ie/PIE.htc");
+	}
+
+		.button:hover {
+			background: none;
+			border-color: #fff;
+		}
+
+	.button-alt:hover {
+		border-color: #444E59;
+		background: #444E59;
+	}
+
+	.button-alt2:hover {
+		border-color: #4ab5d4;
+		background: #4ab5d4;
+	}
+
+/* Forms */
+
+	form input[type=text],
+	form input[type=password],
+	form select,
+	form textarea {
+		-ms-behavior: url("static/js/ie/PIE.htc");
+	}
+
+/* Page Center Title */
+
+	.title span {
+		-ms-behavior: url("static/js/ie/PIE.htc");
+	}
+
+/* Pennant */
+
+	.pennant {
+		-ms-behavior: url("static/js/ie/PIE.htc");
+		border: solid 2px #fff;
+	}
+
+/* Wrappers */
+
+	.homepage #main-wrapper:before {
+		display: none;
+	}
+
+/* Nav */
+
+	.dropotron {
+		-ms-behavior: url("static/js/ie/PIE.htc");
+	}
+
+		.dropotron a, .dropotron span {
+			color: #aab4bb;
+		}
+
+	.dropotron-level-0:before {
+		display: none;
+	}
+
+/* Banner */
+
+	#banner {
+		color: #fff;
+	}
+
+/* Featured */
+
+	#featured {
+		color: #aab4bb;
+	}
+
+/* Main */
+
+	#main {
+		-ms-behavior: url("static/js/ie/PIE.htc");
+	}
