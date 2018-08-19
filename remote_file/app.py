@@ -12,11 +12,15 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from config import set_config
+
 from flask import Flask, request, render_template, redirect, url_for, abort
 from flask_pymongo import PyMongo
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb://mongodb:27017/remote_file"
+
+set_config(app)
+
 mongo = PyMongo(app)
 
 
