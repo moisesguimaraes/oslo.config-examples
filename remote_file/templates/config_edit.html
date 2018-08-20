@@ -21,24 +21,24 @@
 {% block title %}Edit Config{% endblock %}
 
 {% block subtitle %}
-<form method="post" action="{{ url_for('config_delete', id=config.id) }}">
+<form method="post" action="{{ url_for('config_delete', id=conf.id) }}">
   <input type="submit" class="button alt" value="Delete Config"/>
 </form>
 {% endblock %}
 
 {% block content %}
-  <form method="post" action="{{ url_for('config_edit', id=config.id) }}">
+  <form method="post" action="{{ url_for('config_edit', id=conf.id) }}">
     <div class="row 50%">
       <div class="4u">
-        <input type="text" name="id" id="id" placeholder="ID" value="{{ config.id }}"/>
+        <input type="text" name="id" id="id" placeholder="ID" value="{{ conf.id }}"/>
       </div>
       <div class="8u">
-        <input type="text" name="dn" id="dn" placeholder="Domain Name" value="{{ config.dn }}"/>
+        <input type="text" name="dn" id="dn" placeholder="Domain Name" value="{{ conf.dn }}"/>
       </div>
     </div>
     <div class="row 50%">
       <div class="12u">
-        <textarea name="data" id="data" placeholder="Config">{{ config.data }}</textarea>
+        <textarea name="data" id="data" placeholder="Config">{{ conf.data }}</textarea>
       </div>
     </div>
     <div class="row 50%">

@@ -53,7 +53,7 @@ def config_edit(id):
     config = mongo.db.configs.find_one({"id": id})
 
     if request.method == "GET":
-        return render_template('config_edit.html', config=config)
+        return render_template('config_edit.html', conf=config)
 
     if request.method == "POST":
         config["id"] = request.form["id"]
