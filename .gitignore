@@ -3,3 +3,5 @@
 **/newcerts
 
 __pycache__
+
+.tox
